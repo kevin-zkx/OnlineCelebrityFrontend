@@ -89,7 +89,7 @@
             elem: '#currentTableId',//设置绑定元素
             id: "test",
             // url: '../layuimini/api/table.json',//设置后台接口
-            url: 'http://127.0.0.1:5000/sample/',
+            url: 'http://47.100.89.9:5000/sample/',
             // method: 'POST',
             // contentType: 'application/json',
             toolbar: '#toolbarDemo',
@@ -239,7 +239,7 @@
             }
             else if (obj.event === 'sample_to_promote') {
                 $.ajax({
-                    url: 'http://127.0.0.1:5000/sample-to-promote/',
+                    url: 'http://47.100.89.9:5000/sample-to-promote/',
                     data: { "c_id": data["celebrityid"] },
                     type: 'post',
                     dataType: "json",

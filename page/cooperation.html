@@ -98,7 +98,7 @@
             elem: '#currentTableId',//设置绑定元素
             id: "test",
             // url: '../layuimini/api/table.json',//设置后台接口
-            url: 'http://127.0.0.1:5000/cooperation/',
+            url: 'http://47.100.89.9:5000/cooperation/',
             // method: 'POST',
             // contentType: 'application/json',
             toolbar: '#toolbarDemo',
@@ -216,7 +216,7 @@
                     // obj.del();
                     // layer.close(index);
                     $.ajax({
-                        url: 'http://127.0.0.1:5000/cooperation/',
+                        url: 'http://47.100.89.9:5000/cooperation/',
                         data: { "c_id": data["celebrityid"] },
                         type: 'delete',
                         dataType: "json",
@@ -248,7 +248,7 @@
             }
             else if (obj.event === 'cooperation_to_sample') {
                 $.ajax({
-                    url: 'http://127.0.0.1:5000/cooperation-to-sample/',
+                    url: 'http://47.100.89.9:5000/cooperation-to-sample/',
                     data: { "c_id": data["celebrityid"] },
                     type: 'post',
                     dataType: "json",

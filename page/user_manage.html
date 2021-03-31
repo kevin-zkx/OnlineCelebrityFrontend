@@ -29,7 +29,7 @@
         var tableIns = table.render({
             elem: '#currentTableId',
             // url: '../layuimini/api/user.json',
-            url: 'http://127.0.0.1:5000/user/',
+            url: 'http://47.100.89.9:5000/user/',
 
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
@@ -139,7 +139,7 @@
             else if (obj.event === 'delete') {
                 layer.confirm("真的删除ID为" + obj.data["userid"] + "的用户吗？", function (index) {
                     $.ajax({
-                        url: 'http://127.0.0.1:5000/user/',
+                        url: 'http://47.100.89.9:5000/user/',
                         data: { "userid": data["userid"] },
                         type: 'delete',
                         dataType: "json",

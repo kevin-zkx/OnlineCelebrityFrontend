@@ -87,7 +87,7 @@
             elem: '#currentTableId',//设置绑定元素
             id: "test",
             // url: '../layuimini/api/table.json',//设置后台接口
-            url: 'http://127.0.0.1:5000/develop/',
+            url: 'http://47.100.89.9:5000/develop/',
             // method: 'POST',
             // contentType: 'application/json',
             toolbar: '#toolbarDemo',
@@ -260,7 +260,7 @@
                 // var pp = JSON.parse(hh);//将字符串抓换成对象
             } else if (obj.event === 'develop_to_cooperation') {
                 $.ajax({
-                    url: 'http://127.0.0.1:5000/develop-to-cooperation/',
+                    url: 'http://47.100.89.9:5000/develop-to-cooperation/',
                     data: { "c_id": data["celebrityid"] },
                     type: 'post',
                     dataType: "json",
