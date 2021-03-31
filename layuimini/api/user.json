@@ -1,0 +1,35 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 4,
+    "data": [
+      {
+        "userid": 1,
+        "username": "user1.com",
+        "email": 1,
+        "password": 1,
+        "auths": "user1"
+      },
+      {
+        "userid": 1,
+        "username": "user1.com",
+        "email": 1,
+        "password": 1,
+        "auths": "user1"
+      },
+      {
+        "userid": 1,
+        "username": "user1.com",
+        "email": 1,
+        "password": 1,
+        "auths": "user1"
+      },
+      {
+        "userid": 1,
+        "username": "user1.com",
+        "email": 1,
+        "password": 1,
+        "auths": "user1"
+      }
+    ]
+  }

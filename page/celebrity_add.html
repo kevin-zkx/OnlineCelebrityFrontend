@@ -1,0 +1,165 @@
+<script src="../layuimini/js/login.js" charset="utf-8"></script>
+<div class="layuimini-main">
+
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">网站链接</label>
+            <div class="layui-input-block">
+                <input type="text" name="website" placeholder="请输入网红的网站链接" value="" class="layui-input">
+                <!-- <tip>填写自己管理账号的名称。</tip> -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">网站流量</label>
+            <div class="layui-input-block">
+                <input type="number" name="star" placeholder="请输入网红的网站流量" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">域名AS分数</label>
+            <div class="layui-input-block">
+                <input type="number" name="as_score" placeholder="请输入网红的域名AS分数" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">网红姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="celebrityname" lay-verify="required" lay-reqtext="姓名不能为空"
+                    placeholder="请输入网红的姓名" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">邮箱</label>
+            <div class="layui-input-block">
+                <input type="email" name="email" lay-verify="required" lay-reqtext="邮箱不能为空" placeholder="请输入网红的邮箱"
+                    value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">YouTube频道</label>
+            <div class="layui-input-block">
+                <input type="text" name="youtube" placeholder="请输入网红的YouTube频道" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">YouTube粉丝数</label>
+            <div class="layui-input-block">
+                <input type="number" name="youtube_star" placeholder="请输入网红的YouTube粉丝数" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Facebook</label>
+            <div class="layui-input-block">
+                <input type="text" name="facebook" placeholder="请输入网红的Facebook" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Ins</label>
+            <div class="layui-input-block">
+                <input type="text" name="ins" placeholder="请输入网红的Ins" value="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">可合作方式</label>
+            <div class="layui-input-block">
+                <input type="text" name="d_way" placeholder="请输入可合作方式" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" name="d_remark" placeholder="请输入备注" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">跟进人员</label>
+            <!-- <div class="layui-input-block">
+                <input type="text" name="d_principal" placeholder="请输入跟进人员" value="" class="layui-input">
+            </div> -->
+            <div class="layui-input-block">
+                <select name="d_principal" lay-verify="required">
+                    <option value=""></option>
+                    <option value="张三">张三</option>
+                    <option value="李四">李四</option>
+                    <option value="王五">王五</option>
+                    <option value="赵六">赵六</option>
+                    <option value="陈七">陈七</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    layui.use(['form', 'table'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            $ = layui.$;
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+
+        function clear_data(data) {
+            for (var key in data) {
+                if (data[key] === '') {
+                    delete data[key]
+                }
+            }
+            return data
+        }
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            console.log(data);
+            data = clear_data(data.field);
+            // console.log(data);
+            // var index = layer.alert(JSON.stringify(data.field), {
+            //     title: '最终的提交信息'
+            // }, function () {
+
+            //     // 关闭弹出层
+            //     layer.close(index);
+            //     layer.close(parentIndex);
+
+            // });
+            $.ajax({
+                url: 'http://127.0.0.1:5000/develop/',
+                data: data,
+                type: 'post',
+                dataType: "json",
+                success: function (res) {
+                    console.log(res);
+                    console.log(data);
+                    if (res.code == '200') {
+                        // parent.closeIframe(res.msg);
+                        layer.msg('添加网红成功', function () {
+                            window.location = '../index.html';
+                        });
+                    }
+                    else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                    console.log(data)
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>
