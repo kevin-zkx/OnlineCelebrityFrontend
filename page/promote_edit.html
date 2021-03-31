@@ -1,0 +1,207 @@
+<script src="../layuimini/js/login.js" charset="utf-8"></script>
+<div class="layuimini-main">
+   
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">网站链接</label>
+            <div class="layui-input-block">
+                <input id="website" type="text" name="website" placeholder="请输入网红的网站链接" value="" class="layui-input">
+                <!-- <tip>填写自己管理账号的名称。</tip> -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">网站流量</label>
+            <div class="layui-input-block">
+                <input type="number" name="star" id="star" placeholder="请输入网红的网站流量" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">域名AS分数</label>
+            <div class="layui-input-block">
+                <input type="number" name="as_score" id="as_score" autocomplete="on" placeholder="请输入网红的域名AS分数" value=""
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">网红姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="celebrityname" id="celebrityname" placeholder="请输入网红的姓名" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input type="email" name="email" id="email" placeholder="请输入网红的邮箱" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">YouTube频道</label>
+            <div class="layui-input-block">
+                <input type="text" name="youtube" id="youtube" placeholder="请输入YouTube频道" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">YouTube粉丝数</label>
+            <div class="layui-input-block">
+                <input type="number" name="youtube_star" id="youtube_star" placeholder="请输入YouTube粉丝数" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Facebook</label>
+            <div class="layui-input-block">
+                <input type="text" name="facebook" id="facebook" placeholder="请输入Facebook" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Ins</label>
+            <div class="layui-input-block">
+                <input type="text" name="ins" id="ins" placeholder="请输入ins" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">已合作方式</label>
+            <div class="layui-input-block">
+                <input type="text" name="p_way" id="p_way" placeholder="请输入已合作方式" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" name="p_remark" id="p_remark" placeholder="请输入备注" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">跟进人员</label>
+            <div class="layui-input-block">
+                <select name="p_principal" id="p_principal" lay-verify="required">
+                    <option value=""></option>
+                    <option value="朱飞飞">朱飞飞</option>
+                    <option value="钟沁铃">钟沁铃</option>
+                    <option value="阮日珊">阮日珊</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品成本</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="number" name="product_cost" id="product_cost" placeholder="请输入产品成本" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">运输成本</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="number" name="transfer_cost" id="transfer_cost" placeholder="请输入运输成本" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">链接地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="url" id="url" placeholder="请输入链接地址" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">加入联盟</label>
+            <div class="layui-input-block">
+                <input type="radio" name="join_league" value="1" title="是">
+                <input type="radio" name="join_league" value="0" title="否">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: "#sample_date",
+            type: "datetime",
+            value: new Date()
+        });
+    })
+    layui.use(['form', 'table'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            table = layui.table
+        $ = layui.$;
+        var hh = sessionStorage.getItem("allJson");//获取键为allJson的字符串
+        var pp = JSON.parse(hh);//将字符串抓换成对象
+        // var c_id = pp["celebrityid"]
+        // console.log("this is edit page");
+        console.log(pp);
+
+        $("#website").attr("value",pp["website"]);
+        $("#star").attr("value",pp["star"]);
+        $("#as_score").attr("value",pp["as_score"]);
+        $("#celebrityname").attr("value",pp["celebrityname"]);
+        $("#email").attr("value",pp["email"]);
+        $("#youtube").attr("value",pp["youtube"]);
+        $("#youtube_star").attr("value",pp["youtube_star"]);
+        $("#facebook").attr("value",pp["facebook"]);
+        $("#ins").attr("value",pp["ins"]);
+        $("#p_way").attr("value",pp["p_way"]);
+        $("#p_remark").attr("value",pp["p_remark"]);
+        $("#p_principal").find("option[value='" + pp["p_principal"] + "']").attr("selected",true);
+        $("#product_cost").attr("value",pp["product_cost"]);
+        $("#transfer_cost").attr("value",pp["transfer_cost"]);
+        $("#url").attr("value",pp["url"]);
+        // $("#join_league").find("input:radio[value='" + pp["join_league"] + "']").attr("checked",true);
+        $("input[type=radio][name=join_league][value=" + pp["join_league"] +"]").attr("checked","checked");
+
+        /**
+        * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            data = data.field;
+            data["c_id"] = pp["celebrityid"];
+            console.log(data);
+            $.ajax({
+                url: 'http://127.0.0.1:5000/promote/',
+                data: data,
+                type: 'post',
+                dataType: "json",
+                success: function (res) {
+                    console.log(res);
+                    console.log(data);
+                    if (res.code == '200') {
+                        // parent.closeIframe(res.msg);
+                        layer.msg('修改信息成功', function () {
+                            // layer.close(index);
+                            window.location.reload();
+                        });
+                    }
+                    else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                    console.log(data)
+                }
+            });
+            // var index = layer.alert(JSON.stringify(data.field), {
+            //     title: '最终的提交信息'
+            // }, function () {
+
+            //     // 关闭弹出层
+            //     layer.close(index);
+            //     layer.close(parentIndex);
+
+            // });
+
+
+            return false;
+        });
+
+    });
+</script>

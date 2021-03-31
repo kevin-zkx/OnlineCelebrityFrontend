@@ -1,0 +1,171 @@
+<!-- <script src="../layuimini/js/login.js" charset="utf-8"></script> -->
+<div class="layuimini-main">
+
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">修改</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="" value="4" name="modify" lay-skin="switch" lay-filter="switchTest"
+                    lay-text="ON|OFF">
+                <!-- <input type="radio" name="modify" value="4" title="有">
+                <input type="radio" name="modify" value="4" title="无"> -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">删除</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="" value="2" name="delete" lay-skin="switch" lay-filter="switchTest"
+                    lay-text="ON|OFF">
+                <!-- <input type="radio" name="delete" value="2" title="有">
+                <input type="radio" name="delete" value="2" title="无"> -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">导出文件</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="" value="1" name="export" lay-skin="switch" lay-filter="switchTest"
+                    lay-text="ON|OFF">
+                <!-- <input type="radio" name="export" value="1" title="有">
+                <input type="radio" name="export" value="1" title="无"> -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'table'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            table = layui.table
+        $ = layui.$;
+        var hh = sessionStorage.getItem("userinfo");//获取键为allJson的字符串
+        var pp = JSON.parse(hh);//将字符串抓换成对象
+        // console.log(pp)
+
+        if (pp["auths"] === 0) {
+            $("input[name=modify]").attr("checked", false);
+            $("input[name=delete]").attr("checked", false);
+            $("input[name=export]").attr("checked", false);
+        } else if (pp["auths"] === 1) {
+            $("#username").attr("value", pp["username"]);
+            $("input[name=modify]").attr("checked", false);
+            $("input[name=delete]").attr("checked", false);
+            $("input[name=export]").attr("checked", true);
+        } else if (pp["auths"] === 2) {
+            $("#username").attr("value", pp["username"]);
+            $("input[name=modify]").attr("checked", false);
+            $("input[name=delete]").attr("checked", true);
+            $("input[name=export]").attr("checked", false);
+        } else if (pp["auths"] === 3) {
+            $("#username").attr("value", pp["username"]);
+            $("input[name=modify]").attr("checked", false);
+            $("input[name=delete]").attr("checked", true);
+            $("input[name=export]").attr("checked", true);
+        } else if (pp["auths"] === 4) {
+            $("#username").attr("value", pp["username"]);
+            $("input[name=modify]").attr("checked", true);
+            $("input[name=delete]").attr("checked", false);
+            $("input[name=export]").attr("checked", false);
+        } else if (pp["auths"] === 5) {
+            $("#username").attr("value", pp["username"]);
+            $("input[name=modify]").attr("checked", true);
+            $("input[name=delete]").attr("checked", false);
+            $("input[name=export]").attr("checked", true);
+        } else if (pp["auths"] === 6) {
+            $("#username").attr("value", pp["username"]);
+            $("input[name=modify]").attr("checked", true);
+            $("input[name=delete]").attr("checked", true);
+            $("input[name=export]").attr("checked", false);
+        } else if (pp["auths"] === 7) {
+            $("#username").attr("value", pp["username"]);
+            $("input[name=modify]").attr("checked", true);
+            $("input[name=delete]").attr("checked", true);
+            $("input[name=export]").attr("checked", true);
+        }
+
+        /**
+        * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            data = data.field;
+            // data["userid"] = pp["userid"];
+            if (data["modify"] === undefined) {
+                data["modify"] = 0;
+            }
+            if (data["delete"] === undefined) {
+                data["delete"] = 0;
+            }
+            if (data["export"] === undefined) {
+                data["export"] = 0;
+            }
+            auths = Number(data["modify"]) + Number(data["delete"]) + Number(data["export"]);
+            // console.log("auths:----.");
+            // console.log(auths);
+            $.ajax({
+                url: 'http://127.0.0.1:5000/user-auths/',
+                data: { "auths": auths, "userid": pp["userid"] },
+                type: 'post',
+                dataType: "json",
+                success: function (res) {
+                    console.log(res);
+                    console.log(data);
+                    if (res.code == '200') {
+                        // parent.closeIframe(res.msg);
+                        var parentIndex = layer.index;
+                        var index = layer.alert('更新权限成功', function () {
+                            // layer.close(index);
+                            //获取当前时间
+                            // var date = new Date();
+                            // var expiresDays = 1;
+                            //将date设置为0.5天以后的时间
+                            // date.setTime(date.getTime() + expiresDays * 12 * 3600 * 1000);
+                            // document.cookie = "auths=" + auths + "; expires=" + date.toGMTString();
+                            // parent.location.reload();
+                            layer.close(index);
+                            layer.close(parentIndex);
+                            // window.location = 'page/user_manage.html';
+                            // parent.location.reload();
+                            // parent.location.reload();
+                            // location.reload();
+                            // parent.closeIframe();
+                        });
+                        // var index = layer.load(1, {time: 2000});
+                        // layer.close(index);
+                    }
+                    else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (res) {
+                    layer.msg('更新权限失败', function () {
+                        // layer.close(index);
+                        window.location.reload();
+                    });
+                }
+            });
+            // var index = layer.alert(JSON.stringify(data.field), {
+            //     title: '最终的提交信息'
+            // }, function () {
+
+            //     // 关闭弹出层
+            //     layer.close(index);
+            //     layer.close(parentIndex);
+
+            // });
+
+
+            return false;
+        });
+
+    });
+</script>
