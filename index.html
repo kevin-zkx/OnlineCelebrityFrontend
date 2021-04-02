@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="icon" href="images/favicon.ico">
+    <link rel="icon" href="layuimini/images/favicon.ico">
     <link rel="stylesheet" href="layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
     <link rel="stylesheet" href="layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <link rel="stylesheet" href="layuimini/css/layuimini.css?v=2.0.1" media="all">
@@ -36,11 +36,6 @@
                 <a>
                     <div class="layuimini-tool"><i title="展开" class="fa fa-outdent" data-side-fold="1"></i></div>
                 </a>
-
-                <!--电脑端头部菜单-->
-                <!-- <ul class="layui-nav layui-layout-left layuimini-header-menu layuimini-menu-header-pc layuimini-pc-show">
-            </ul> -->
-
                 <!--手机端头部菜单-->
                 <ul class="layui-nav layui-layout-left layuimini-header-menu layuimini-mobile-show">
                     <li class="layui-nav-item">
@@ -52,29 +47,20 @@
 
                 <ul class="layui-nav layui-layout-right">
 
-                    <li class="layui-nav-item" lay-unselect>
+                    <!-- <li class="layui-nav-item" lay-unselect>
                         <a href="javascript:;" data-refresh="刷新"><i class="fa fa-refresh"></i></a>
-                    </li>
-                    <li class="layui-nav-item" lay-unselect>
+                    </li> -->
+                    <!-- <li class="layui-nav-item" lay-unselect>
                         <a href="javascript:;" data-clear="清理" class="layuimini-clear"><i class="fa fa-trash-o"></i></a>
-                    </li>
-                    <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
+                    </li> -->
+                    <!-- <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
                         <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
-                    </li>
+                    </li> -->
                     <li class="layui-nav-item layuimini-setting">
                         <a href="javascript:;">
                             <div id="username"></div>
                         </a>
                         <dl class="layui-nav-child">
-                            <!-- <dd>
-                                <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料"
-                                    data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
-                            </dd>
-                            <dd>
-                                <a href="javascript:;" layuimini-content-href="page/user-password.html"
-                                    data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
-                            </dd>
-                            <dd> -->
                                 <hr>
                             </dd>
                             <dd>
@@ -82,9 +68,9 @@
                         </dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item layuimini-select-bgcolor" lay-unselect>
+                    <!-- <li class="layui-nav-item layuimini-select-bgcolor" lay-unselect>
                         <a href="javascript:;" data-bgcolor="配色方案"><i class="fa fa-ellipsis-v"></i></a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -123,6 +109,7 @@
     <script src="layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
     <script src="layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
     <script src="layuimini/js/login.js" charset="utf-8"></script>
+    <script src="layuimini/js/me-config.js" charset="utf-8"></script>
     <script>
         function getCookie(name) {
             var j_test = {}
@@ -131,11 +118,9 @@
                 test[i].split("=");
                 j_test[test[i].split("=")[0]] = test[i].split("=")[1];
             }
-            // console.log(j_test);
             return j_test[name];
         };
         me = getCookie(" username");
-        // console.log("my_user_name:" + me);
         function setValueForDiv(id, content) {
             var element = document.getElementById(id);
             element.innerHTML = unescape(content);

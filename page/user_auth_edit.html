@@ -7,8 +7,6 @@
             <div class="layui-input-block">
                 <input type="checkbox" checked="" value="4" name="modify" lay-skin="switch" lay-filter="switchTest"
                     lay-text="ON|OFF">
-                <!-- <input type="radio" name="modify" value="4" title="有">
-                <input type="radio" name="modify" value="4" title="无"> -->
             </div>
         </div>
         <div class="layui-form-item">
@@ -16,8 +14,6 @@
             <div class="layui-input-block">
                 <input type="checkbox" checked="" value="2" name="delete" lay-skin="switch" lay-filter="switchTest"
                     lay-text="ON|OFF">
-                <!-- <input type="radio" name="delete" value="2" title="有">
-                <input type="radio" name="delete" value="2" title="无"> -->
             </div>
         </div>
         <div class="layui-form-item">
@@ -25,8 +21,6 @@
             <div class="layui-input-block">
                 <input type="checkbox" checked="" value="1" name="export" lay-skin="switch" lay-filter="switchTest"
                     lay-text="ON|OFF">
-                <!-- <input type="radio" name="export" value="1" title="有">
-                <input type="radio" name="export" value="1" title="无"> -->
             </div>
         </div>
         <div class="layui-form-item">
@@ -44,7 +38,6 @@
         $ = layui.$;
         var hh = sessionStorage.getItem("userinfo");//获取键为allJson的字符串
         var pp = JSON.parse(hh);//将字符串抓换成对象
-        // console.log(pp)
 
         if (pp["auths"] === 0) {
             $("input[name=modify]").attr("checked", false);
@@ -98,7 +91,6 @@
         //监听提交
         form.on('submit(saveBtn)', function (data) {
             data = data.field;
-            // data["userid"] = pp["userid"];
             if (data["modify"] === undefined) {
                 data["modify"] = 0;
             }
@@ -109,61 +101,38 @@
                 data["export"] = 0;
             }
             auths = Number(data["modify"]) + Number(data["delete"]) + Number(data["export"]);
-            // console.log("auths:----.");
-            // console.log(auths);
             $.ajax({
-                url: 'http://47.100.89.9:5000/user-auths/',
+                url: ipaddress + '/user-auths/',
                 data: { "auths": auths, "userid": pp["userid"] },
                 type: 'post',
                 dataType: "json",
                 success: function (res) {
-                    console.log(res);
-                    console.log(data);
                     if (res.code == '200') {
-                        // parent.closeIframe(res.msg);
                         var parentIndex = layer.index;
-                        var index = layer.alert('更新权限成功', function () {
-                            // layer.close(index);
-                            //获取当前时间
-                            // var date = new Date();
-                            // var expiresDays = 1;
-                            //将date设置为0.5天以后的时间
-                            // date.setTime(date.getTime() + expiresDays * 12 * 3600 * 1000);
-                            // document.cookie = "auths=" + auths + "; expires=" + date.toGMTString();
-                            // parent.location.reload();
+                        var index = layer.alert(res.msg, function () {
                             layer.close(index);
                             layer.close(parentIndex);
-                            // window.location = 'page/user_manage.html';
-                            // parent.location.reload();
-                            // parent.location.reload();
-                            // location.reload();
-                            // parent.closeIframe();
+                            window.location.reload();
                         });
-                        // var index = layer.load(1, {time: 2000});
-                        // layer.close(index);
                     }
                     else {
-                        alert(res.msg);
+                        var parentIndex = layer.index;
+                        var index = layer.alert(res.msg, function () {
+                            layer.close(index);
+                            layer.close(parentIndex);
+                            window.location.reload();
+                        });
                     }
                 },
                 error: function (res) {
-                    layer.msg('更新权限失败', function () {
-                        // layer.close(index);
-                        window.location.reload();
-                    });
+                    var parentIndex = layer.index;
+                        var index = layer.alert(res.msg, function () {
+                            layer.close(index);
+                            layer.close(parentIndex);
+                            window.location.reload();
+                        });
                 }
             });
-            // var index = layer.alert(JSON.stringify(data.field), {
-            //     title: '最终的提交信息'
-            // }, function () {
-
-            //     // 关闭弹出层
-            //     layer.close(index);
-            //     layer.close(parentIndex);
-
-            // });
-
-
             return false;
         });
 

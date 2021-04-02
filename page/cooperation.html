@@ -2,7 +2,7 @@
 <div class="layuimini-container layuimini-page-anim">
     <div class="layuimini-main">
 
-        <fieldset class="table-search-fieldset">
+        <!-- <fieldset class="table-search-fieldset">
             <legend>搜索信息</legend>
             <div style="margin: 10px 10px 10px 10px">
                 <form class="layui-form layui-form-pane" action="">
@@ -44,7 +44,7 @@
                     </div>
                 </form>
             </div>
-        </fieldset>
+        </fieldset> -->
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
@@ -53,12 +53,7 @@
         </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
-
-        <!-- <script type="text/html" id="currentTableBar">
-            <button id="edit_button" class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</button>
-            <a id="delete" class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
-            <a class="layui-btn layui-btn-xs" lay-event="cooperation_to_sample">马上寄样品</a>
-        </script> -->
+        
         <script type="text/html" id="currentTableBar_edit">
             <a id="edit_button" class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
         </script>
@@ -80,14 +75,11 @@
             test[i].split("=");
             j_test[test[i].split("=")[0]] = test[i].split("=")[1];
         }
-        // console.log(j_test);
         return j_test[name];
     };
-    console.log(getCookie(" auths"));
     flag_edit = me().flag_edit;
     flag_delete = me().flag_delete;
     flag_export = me().flag_export;
-    // console.log(flag_edit);
     layui.use(['form', 'table', 'miniPage', 'element'], function () {
         var $ = layui.jquery,
             form = layui.form,
@@ -97,10 +89,7 @@
         var ins1 = table.render({
             elem: '#currentTableId',//设置绑定元素
             id: "test",
-            // url: '../layuimini/api/table.json',//设置后台接口
-            url: 'http://47.100.89.9:5000/cooperation/',
-            // method: 'POST',
-            // contentType: 'application/json',
+            url: ipaddress + '/cooperation/',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -135,8 +124,6 @@
 
             parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
-                // console.log(this);
-                // console.log(JSON.stringify(res));
                 if (this.page.curr) {
                     result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
                 }
@@ -170,28 +157,26 @@
                 title: '最终的搜索信息'
             });
 
-            //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
+            // //执行搜索重载
+            // table.reload('currentTableId', {
+            //     page: {
+            //         curr: 1
+            //     }
+            //     , where: {
+            //         searchParams: result
+            //     }
+            // }, 'data');
 
             return false;
         });
 
         //监听表格复选框选择
         table.on('checkbox(currentTableFilter)', function (obj) {
-            console.log(obj)
         });
 
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
-                // console.log(obj.data);
                 sessionStorage.setItem("allJson", JSON.stringify(obj.data));
                 var content = miniPage.getHrefContent('../page/cooperation_edit.html');
                 var openWH = miniPage.getOpenWidthHeight();
@@ -213,60 +198,58 @@
             }
             else if (obj.event === 'delete') {
                 layer.confirm("真的删除ID为" + obj.data["celebrityid"] + "的网红吗？", function (index) {
-                    // obj.del();
-                    // layer.close(index);
                     $.ajax({
-                        url: 'http://47.100.89.9:5000/cooperation/',
+                        url: ipaddress + '/cooperation/',
                         data: { "c_id": data["celebrityid"] },
                         type: 'delete',
                         dataType: "json",
                         success: function (res) {
-                            console.log(res);
-                            console.log(data["celebrityid"]);
                             if (res.code == '200') {
-                                // parent.closeIframe(res.msg);
-                                layer.msg('删除成功', function () {
-                                    // window.location = './develop.html';
+                                layer.msg(res.msg, function () {
+                                    layer.close(index);
+                                    window.location.reload();
+                                });
+                            } else {
+                                layer.msg(res.msg, function () {
                                     layer.close(index);
                                     window.location.reload();
                                 });
                             }
-                            else {
-                                alert(res.msg);
-                            }
                         },
                         error: function (res) {
-                            console.log(res)
-                            console.log(data)
+                            layer.msg(res.msg, function () {
+                                    layer.close(index);
+                                    window.location.reload();
+                            });
                         }
                     });
                 });
-                // var checkStatus = table.checkStatus('currentTableId')
-                //     , data = checkStatus.data;
-                // var hh = sessionStorage.getItem("allJson");//获取键为allJson的字符串
-                // var pp = JSON.parse(hh);//将字符串抓换成对象
             }
             else if (obj.event === 'cooperation_to_sample') {
                 $.ajax({
-                    url: 'http://47.100.89.9:5000/cooperation-to-sample/',
+                    url: ipaddress + '/cooperation-to-sample/',
                     data: { "c_id": data["celebrityid"] },
                     type: 'post',
                     dataType: "json",
                     success: function (res) {
-                        console.log(data["celebrityid"]);
                         if (res.code == '200') {
-                            layer.msg('马上待寄样成功', function () {
+                            layer.msg(res.msg, function () {
                                 layer.close(index);
                                 window.location.reload();
                             });
                         }
                         else {
-                            alert(res.msg);
+                            layer.msg(res.msg, function () {
+                                layer.close(index);
+                                window.location.reload();
+                            });
                         }
                     },
                     error: function (res) {
-                        console.log(res)
-                        console.log(data)
+                        layer.msg(res.msg, function () {
+                                layer.close(index);
+                                window.location.reload();
+                            });
                     }
                 });
             }

@@ -6,19 +6,18 @@
             <label class="layui-form-label">网站链接</label>
             <div class="layui-input-block">
                 <input id="website" type="text" name="website" placeholder="请输入网红的网站链接" value="" class="layui-input">
-                <!-- <tip>填写自己管理账号的名称。</tip> -->
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">网站流量</label>
             <div class="layui-input-block">
-                <input type="number" name="star" id="star" placeholder="请输入网红的网站流量" value="" class="layui-input">
+                <input type="text" name="star" id="star" placeholder="请输入网红的网站流量" value="" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">域名AS分数</label>
             <div class="layui-input-block">
-                <input type="number" name="as_score" id="as_score" autocomplete="on" placeholder="请输入网红的域名AS分数" value=""
+                <input type="text" name="as_score" id="as_score" placeholder="请输入网红的域名AS分数" value=""
                     class="layui-input">
             </div>
         </div>
@@ -43,7 +42,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">YouTube粉丝数</label>
             <div class="layui-input-block">
-                <input type="number" name="youtube_star" id="youtube_star" placeholder="请输入网红的YouTube粉丝数" value="" class="layui-input">
+                <input type="text" name="youtube_star" id="youtube_star" placeholder="请输入网红的YouTube粉丝数" value="" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -72,9 +71,6 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">跟进人员</label>
-            <!-- <div class="layui-input-block">
-                <input type="text" name="d_principal" placeholder="请输入跟进人员" value="" class="layui-input">
-            </div> -->
             <div class="layui-input-block">
                 <select name="c_principal" id="c_principal" lay-verify="required">
                     <option value=""></option>
@@ -90,12 +86,6 @@
                 <input type="text" name="c_channel" id="c_channel" placeholder="请输入跟进渠道" value="" class="layui-input">
             </div>
         </div>
-        <!-- <div class="layui-form-item">
-            <label class="layui-form-label">合作状态</label>
-            <div class="layui-input-block">
-                <input type="text" name="d_status" id="d_status" placeholder="请输入合作状态" value="" class="layui-input">
-            </div>
-        </div> -->
         <div class="layui-form-item">
             <label class="layui-form-label">录入时间</label>
             <div class="layui-input-block">
@@ -126,9 +116,6 @@
         $ = layui.$;
         var hh = sessionStorage.getItem("allJson");//获取键为allJson的字符串
         var pp = JSON.parse(hh);//将字符串抓换成对象
-        // var c_id = pp["celebrityid"]
-        // console.log("this is edit page");
-        console.log(pp);
 
         $("#website").attr("value",pp["website"]);
         $("#star").attr("value",pp["star"]);
@@ -157,41 +144,29 @@
         form.on('submit(saveBtn)', function (data) {
             data = data.field;
             data["c_id"] = pp["celebrityid"];
-            console.log(data);
             $.ajax({
-                url: 'http://47.100.89.9:5000/cooperation/',
+                url: ipaddress + '/cooperation/',
                 data: data,
                 type: 'post',
                 dataType: "json",
                 success: function (res) {
-                    console.log(res);
-                    console.log(data);
                     if (res.code == '200') {
-                        // parent.closeIframe(res.msg);
-                        layer.msg('修改信息成功', function () {
-                            window.location = '../index.html';
+                        layer.msg(res.msg, function () {
+                            window.location.reload();
                         });
                     }
                     else {
-                        alert(res.msg);
+                        layer.msg(res.msg, function () {
+                            window.location.reload();
+                        });
                     }
                 },
                 error: function (res) {
-                    console.log(res)
-                    console.log(data)
+                    layer.msg(res.msg, function () {
+                            window.location.reload();
+                        });
                 }
             });
-            // var index = layer.alert(JSON.stringify(data.field), {
-            //     title: '最终的提交信息'
-            // }, function () {
-
-            //     // 关闭弹出层
-            //     layer.close(index);
-            //     layer.close(parentIndex);
-
-            // });
-
-
             return false;
         });
 
