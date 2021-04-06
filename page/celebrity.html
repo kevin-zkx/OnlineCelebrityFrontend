@@ -10,7 +10,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">网红姓名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="celebrityname" autocomplete="off" class="layui-input">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -48,7 +48,6 @@
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加网红 </button>
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="export"> 导出为CSV </button>
             </div>
         </script>
@@ -56,14 +55,8 @@
         <table class="layui-hide" id="currentTableId" lay-data="{id:'currentTableId'}" lay-filter="currentTableFilter">
         </table>
 
-        <script type="text/html" id="currentTableBar_edit">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
-        </script>
-        <script type="text/html" id="currentTableBar_delete">
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
-        </script>
-        <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-xs" lay-event="develop_to_cooperation">进入待合作</a>
+        <script type="text/html" id="currentTableBar_show">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="show">查看</a>
         </script>
 
     </div>
@@ -83,7 +76,7 @@
         var ins1 = table.render({
             elem: '#currentTableId',//设置绑定元素
             id: "currentTableId",
-            url: ipaddress + '/develop/',
+            url: ipaddress + '/celebrity/',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -102,15 +95,9 @@
                 { field: 'youtube_star', width: 130, title: 'YouTube粉丝数' },
                 { field: 'facebook', width: 100, title: 'Facebook' },
                 { field: 'ins', width: 80, title: 'Ins' },
-                { field: 'd_way', width: 120, title: '可合作方式' },
-                { field: 'd_remark', width: 80, title: '备注' },
-                { field: 'd_principal', width: 86, title: '跟进人员' },
-                { field: 'addtime', width: 160, title: '录入时间' },
-                { minWidth: 50, toolbar: '#currentTableBar_edit', align: "center", hide: flag_edit },
-                { minWidth: 50, toolbar: '#currentTableBar_delete', align: "center", hide: flag_delete },
-                { minWidth: 100, toolbar: '#currentTableBar', align: "center" }
+                { minWidth: 50, toolbar: '#currentTableBar_show', align: "center"},
             ]],
-            limits: [10, 15, 20, 25, 50, 100],
+            limits: [5,10, 15, 20, 25, 50, 100],
             limit: 10,
             page: true,
             skin: 'line',
@@ -135,21 +122,20 @@
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
-            // console.log(data.field)
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
+
             //执行搜索重载
-            // table.reload('currentTableId', {
-            //     page: {
-            //         curr: 1
-            //     },
-            //     url: ipaddress + "/develop/find/",
-            //     where: {
-            //         "celebrityname": data.field['celebrityname'],
-            //         "email": data.field['email'],
-            //         "celebrityid": data.field['celebrityid'],
-            //         "website": data.field['website'],
-            //         "youtube": data.field['youtube']
-            //     }
-            // });
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
+
             return false;
         });
 
@@ -157,35 +143,13 @@
          * toolbar事件监听
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'add') {   // 监听添加操作
-                var content = miniPage.getHrefContent('../page/celebrity_add.html');
-                var openWH = miniPage.getOpenWidthHeight();
-
-                var index = layer.open({
-                    title: '添加用户',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin: true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1] + 'px'],
-                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
-                table.reload('currentTableId', {
-                    url: ipaddress + '/develop/'
-                    , where: {} //设定异步数据接口的额外参数
-                    //,height: 300
-                });
-            } else if (obj.event === 'export') {  // 监听删除操作
+            if (obj.event === 'export') {   // 监听添加操作
                 if (flag_export === true) {
                     table.exportFile(ins1.config.id, obj.data);
                 } else {
                     layer.msg('没有导出权限');
                 }
-            }
+            } 
         });
 
         //监听表格复选框选择
@@ -194,13 +158,13 @@
 
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'edit') {
-                sessionStorage.setItem("allJson", JSON.stringify(obj.data));
-                var content = miniPage.getHrefContent('../page/develop_edit.html');
+            if (obj.event === 'show') {
+                sessionStorage.setItem("celebrity_info", JSON.stringify(obj.data));
+                var content = miniPage.getHrefContent('../page/celebrity_info.html');
                 var openWH = miniPage.getOpenWidthHeight();
 
                 var index = layer.open({
-                    title: '编辑用户',
+                    title: '网红详细信息',
                     type: 1,
                     shade: 0.2,
                     maxmin: true,
@@ -213,63 +177,7 @@
                     layer.full(index);
                 });
                 return false;
-            } else if (obj.event === 'delete') {
-                layer.confirm("真的删除ID为" + obj.data["celebrityid"] + "的网红吗？", function (index) {
-                    $.ajax({
-                        url: ipaddress + '/develop/',
-                        data: { "c_id": data["celebrityid"] },
-                        type: 'delete',
-                        dataType: "json",
-                        success: function (res) {
-                            if (res.code == '200') {
-                                layer.msg(res.msg, function () {
-                                    layer.close(index);
-                                    window.location.reload();
-                                });
-                            }
-                            else {
-                                layer.msg(res.msg, function () {
-                                    layer.close(index);
-                                    window.location.reload();
-                                });
-                            }
-                        },
-                        error: function (res) {
-                            layer.msg(res.msg, function () {
-                                layer.close(index);
-                                window.location.reload();
-                            });
-                        }
-                    });
-                });
-            } else if (obj.event === 'develop_to_cooperation') {
-                $.ajax({
-                    url: ipaddress + '/develop-to-cooperation/',
-                    data: { "c_id": data["celebrityid"] },
-                    type: 'post',
-                    dataType: "json",
-                    success: function (res) {
-                        if (res.code == '200') {
-                            layer.msg(res.msg, function () {
-                                layer.close(index);
-                                window.location.reload();
-                            });
-                        }
-                        else {
-                            layer.msg(res.msg, function () {
-                                layer.close(index);
-                                window.location.reload();
-                            });
-                        }
-                    },
-                    error: function (res) {
-                        layer.msg(res.msg, function () {
-                            layer.close(index);
-                            window.location.reload();
-                        });
-                    }
-                });
-            }
+            } 
         });
 
     });

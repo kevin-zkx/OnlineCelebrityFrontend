@@ -24,7 +24,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">网红姓名</label>
             <div class="layui-input-block">
-                <input type="text" name="celebrityname" id="celebrityname" placeholder="请输入网红的姓名" value="" class="layui-input">
+                <input type="text" name="celebrityname" id="celebrityname" placeholder="请输入网红的姓名" value=""
+                    class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -36,19 +37,22 @@
         <div class="layui-form-item">
             <label class="layui-form-label">YouTube频道</label>
             <div class="layui-input-block">
-                <input type="text" name="youtube" id="youtube" placeholder="请输入网红的YouTube频道" value="" class="layui-input">
+                <input type="text" name="youtube" id="youtube" placeholder="请输入网红的YouTube频道" value=""
+                    class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">YouTube粉丝数</label>
             <div class="layui-input-block">
-                <input type="text" name="youtube_star" id="youtube_star" placeholder="请输入网红的YouTube粉丝数" value="" class="layui-input">
+                <input type="text" name="youtube_star" id="youtube_star" placeholder="请输入网红的YouTube粉丝数" value=""
+                    class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">Facebook</label>
             <div class="layui-input-block">
-                <input type="text" name="facebook" id="facebook" placeholder="请输入网红的Facebook" value="" class="layui-input">
+                <input type="text" name="facebook" id="facebook" placeholder="请输入网红的Facebook" value=""
+                    class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -97,18 +101,18 @@
         var hh = sessionStorage.getItem("allJson");//获取键为allJson的字符串
         var pp = JSON.parse(hh);//将字符串抓换成对象
 
-        $("#website").attr("value",pp["website"]);
-        $("#star").attr("value",pp["star"]);
-        $("#as_score").attr("value",pp["as_score"]);
-        $("#celebrityname").attr("value",pp["celebrityname"]);
-        $("#email").attr("value",pp["email"]);
-        $("#youtube").attr("value",pp["youtube"]);
-        $("#youtube_star").attr("value",pp["youtube_star"]);
-        $("#facebook").attr("value",pp["facebook"]);
-        $("#ins").attr("value",pp["ins"]);
-        $("#d_way").attr("value",pp["d_way"]);
-        $("#d_remark").attr("value",pp["d_remark"]);
-        $("#d_principal").find("option[value='" + pp["d_principal"] + "']").attr("selected",true);
+        $("#website").attr("value", pp["website"]);
+        $("#star").attr("value", pp["star"]);
+        $("#as_score").attr("value", pp["as_score"]);
+        $("#celebrityname").attr("value", pp["celebrityname"]);
+        $("#email").attr("value", pp["email"]);
+        $("#youtube").attr("value", pp["youtube"]);
+        $("#youtube_star").attr("value", pp["youtube_star"]);
+        $("#facebook").attr("value", pp["facebook"]);
+        $("#ins").attr("value", pp["ins"]);
+        $("#d_way").attr("value", pp["d_way"]);
+        $("#d_remark").attr("value", pp["d_remark"]);
+        $("#d_principal").find("option[value='" + pp["d_principal"] + "']").attr("selected", true);
         // $("#d_status").attr("value",pp["d_status"]);
 
 
@@ -131,14 +135,13 @@
                 dataType: "json",
                 success: function (res) {
                     if (res.code == '200') {
-                        layer.msg(res.msg, {time:1000}, function () {
+                        layer.msg(res.msg, { time: 1000 }, function () {
                             layer.close(parentIndex);
                             var index = layer.load(2);
                             layer.close(index);
-                            window.parent.location.reload();
+                            location.reload();
                         });
-                    }
-                    else {
+                    } else {
                         layer.msg(res.msg, function () {
                             layer.close(parentIndex);
                             var index = layer.load(2);
@@ -149,10 +152,10 @@
                 },
                 error: function (res) {
                     layer.msg(res.msg, function () {
-                            layer.close(parentIndex);
-                            var index = layer.load(2);
-                            layer.close(index);
-                            window.parent.location.reload();
+                        layer.close(parentIndex);
+                        var index = layer.load(2);
+                        layer.close(index);
+                        window.parent.location.reload();
                     });
                 }
             });
