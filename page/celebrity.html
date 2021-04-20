@@ -1,0 +1,184 @@
+<script src="../layuimini/js/login.js" charset="utf-8"></script>
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <!-- <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">网红姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">网红邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">网红ID</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="c_id" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">网站链接</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="website" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">YouTube</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="youtube" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset> -->
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="export"> 导出为CSV </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-data="{id:'currentTableId'}" lay-filter="currentTableFilter">
+        </table>
+
+        <script type="text/html" id="currentTableBar_show">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="show">查看</a>
+        </script>
+
+    </div>
+</div>
+<script src="../layuimini/js/util.js" charset="utf-8"></script>
+<script>
+    flag_edit = me().flag_edit;
+    flag_delete = me().flag_delete;
+    flag_export = me().flag_export;
+
+    layui.use(['form', 'table', 'miniPage', 'element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+
+        var ins1 = table.render({
+            elem: '#currentTableId',//设置绑定元素
+            id: "currentTableId",
+            url: ipaddress + '/celebrity/',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [[//设置表头
+                { type: "numbers", width: 50 },
+                { field: 'celebrityid', width: 105, title: '网红编号', sort: true },
+                { field: 'website', width: 86, title: '网站链接' },
+                { field: 'star', width: 86, title: '网站流量' },
+                { field: 'as_score', width: 120, title: '域名AS分数', sort: true },
+                { field: 'celebrityname', width: 80, title: '姓名' },
+                { field: 'email', width: 80, title: '邮箱' },
+                { field: 'youtube', width: 130, title: 'YouTube频道' },
+                { field: 'youtube_star', width: 130, title: 'YouTube粉丝数' },
+                { field: 'facebook', width: 100, title: 'Facebook' },
+                { field: 'ins', width: 80, title: 'Ins' },
+                { minWidth: 50, toolbar: '#currentTableBar_show', align: "center"},
+            ]],
+            limits: [5,10, 15, 20, 25, 50, 100],
+            limit: 10,
+            page: true,
+            skin: 'line',
+
+            parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                var result;
+                if (this.page.curr) {
+                    result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                }
+                else {
+                    result = res.data.slice(0, this.limit);
+                }
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": result //解析数据列表
+                };
+            }
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'export') {   // 监听添加操作
+                if (flag_export === true) {
+                    table.exportFile(ins1.config.id, obj.data);
+                } else {
+                    layer.msg('没有导出权限');
+                }
+            } 
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'show') {
+                sessionStorage.setItem("celebrity_info", JSON.stringify(obj.data));
+                var content = miniPage.getHrefContent('../page/celebrity_info.html');
+                var openWH = miniPage.getOpenWidthHeight();
+
+                var index = layer.open({
+                    title: '网红详细信息',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: [openWH[0] + 'px', openWH[1] + 'px'],
+                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
+                    content: content,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } 
+        });
+
+    });
+</script>

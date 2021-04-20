@@ -136,17 +136,13 @@
                     <input type="password" name="password" lay-verify="required" placeholder="请输入密码" autocomplete="off"
                         class="layui-input admin-input" value="">
                 </div>
-                <!-- <div>
-                <input type="text" name="captcha" placeholder="请输入验证码" autocomplete="off" class="layui-input admin-input admin-input-verify" value="">
-                <img class="admin-captcha" width="90" height="30" src="layuimini/images/captcha.jpg">
-            </div> -->
                 <button class="layui-btn admin-button" lay-submit="" lay-filter="login">登 陆</button>
             </form>
         </div>
     </div>
     <script src="layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="layuimini/js/me-config.js" charset="utf-8"></script>
     <script>
-        
         layui.use(['form'], function () {
             var form = layui.form,
                 layer = layui.layer,
@@ -166,15 +162,13 @@
                     return false;
                 }
                 $.ajax({
-                    url: 'http://127.0.0.1:5000/user/login/',
+                    url: ipaddress + '/user/login/',
                     data: data,
                     type: 'post',
                     dataType: "json",
                     success: function (res) {
-                        // console.log(res);
                         if (res.code == '10') {
-                            // parent.closeIframe(res.msg);
-                            layer.msg('登录成功', function () {
+                            layer.msg(res.msg, function () {
                                 //获取当前时间
                                 var date = new Date();
                                 var expiresDays = 1;
@@ -185,7 +179,6 @@
                                 document.cookie = "username="+res.data["username"]+"; expires=" + date.toGMTString();
                                 document.cookie = "super="+res.data["super"]+"; expires=" + date.toGMTString();
                                 document.cookie = "auths="+res.data["auths"]+"; expires=" + date.toGMTString();
-                                // sessionStorage.setItem("user_auth", JSON.stringify(res.data));
                                 window.location = './index.html';
                             });
                         }//用sessionStorage.setItem("login", 0);来实现
@@ -194,7 +187,7 @@
                         }
                     },
                     error: function (data) {
-                        console.log(data)
+                        layer.msg('服务器出错，暂时不能登录！');
                     }
                 });
                 return false;

@@ -44,6 +44,12 @@
               "href": "page/promote.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
+            },
+            {
+              "title": "网红信息",
+              "href": "page/celebrity.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
             }
           ]
         },
